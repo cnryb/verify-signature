@@ -314,8 +314,7 @@ jobs:
           yarn artifacts
       - name: List packages
         run: 
-          cd addon
-          ls -R ./npm
+          ls -R ./addon/npm
         shell: bash
       - name: Publish
         run: |
