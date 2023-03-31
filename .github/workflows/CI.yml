@@ -27,11 +27,13 @@ jobs:
             target: x86_64-apple-darwin
             build: |
               cd addon
+              yarn
               yarn build
               strip -x *.node
           - host: windows-latest
             build: |
               cd addon
+              yarn
               yarn build
             target: x86_64-pc-windows-msvc
           - host: ubuntu-latest
@@ -39,6 +41,7 @@ jobs:
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
             build: |-
               cd addon
+              yarn
               set -e &&
               yarn build --target x86_64-unknown-linux-gnu &&
               strip *.node
@@ -47,11 +50,13 @@ jobs:
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |
               cd addon
+              yarn
               set -e && yarn build && strip *.node
           - host: macos-latest
             target: aarch64-apple-darwin
             build: |
               cd addon
+              yarn
               yarn build --target aarch64-apple-darwin
               strip -x *.node
     name: stable - ${{ matrix.settings.target }} - node@18
@@ -120,7 +125,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ${{ env.APP_NAME }}.*.node
+          path: addon/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -258,7 +263,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: bindings-universal-apple-darwin
-          path: ${{ env.APP_NAME }}.*.node
+          path: addon/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   publish:
     name: Publish
