@@ -3,7 +3,8 @@
 #[macro_use]
 extern crate napi_derive;
 
+
 #[napi]
-pub fn sum(a: i32, b: i32) -> i32 {
-  a + b
+pub fn verify_signature(pem: String, data: String, signature: String) -> bool {
+    verify_signature::verify(pem.as_str(), data.as_str(), signature.as_str())
 }
