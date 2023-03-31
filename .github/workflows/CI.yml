@@ -157,12 +157,16 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: .
+          path: ./addon/
       - name: List packages
-        run: ls -R .
+        run: |
+          cd addon
+          ls -R .
         shell: bash
       - name: Test bindings
-        run: yarn test
+        run: |
+          cd addon
+          yarn test
   test-linux-x64-gnu-binding:
     name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
     needs:
@@ -190,12 +194,16 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: bindings-x86_64-unknown-linux-gnu
-          path: .
+          path: ./addon/
       - name: List packages
-        run: ls -R .
+        run: |
+          cd addon
+          ls -R .
         shell: bash
       - name: Test bindings
-        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim yarn test
+        run: |
+          cd addon
+          docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim yarn test
   test-linux-x64-musl-binding:
     name: Test bindings on x86_64-unknown-linux-musl - node@${{ matrix.node }}
     needs:
@@ -219,18 +227,23 @@ jobs:
           cache-dependency-path: addon/yarn.lock
       - name: Install dependencies
         run: |
+          cd addon
           yarn config set supportedArchitectures.libc "musl"
           yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: bindings-x86_64-unknown-linux-musl
-          path: .
+          path: ./addon/
       - name: List packages
-        run: ls -R .
+        run: |
+          cd addon
+          ls -R .
         shell: bash
       - name: Test bindings
-        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine yarn test
+        run: |
+          cd addon
+          docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine yarn test
   universal-macOS:
     name: Build universal macOS binary
     needs:
