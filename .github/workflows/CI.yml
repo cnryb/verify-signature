@@ -267,14 +267,17 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: bindings-x86_64-apple-darwin
-          path: artifacts
+          path: ./addon/artifacts
       - name: Download macOS arm64 artifact
         uses: actions/download-artifact@v3
         with:
           name: bindings-aarch64-apple-darwin
-          path: artifacts
+          path: ./addon/artifacts
       - name: Combine binaries
-        run: yarn universal
+        run: |
+          cd addon
+          yarn
+          yarn universal
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
